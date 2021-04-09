@@ -1,6 +1,6 @@
 #!/bin/sh
 
-COLOR=0
+COLOR=${COLOR:-0}
 
 function info {
     [ $COLOR -eq 1 ] &&
@@ -61,14 +61,14 @@ function add_v1_user() {
     org=$4
 
     read_buckets=""
-    for bucket_name in $(get_acl $cnf $name "read"); do
-        bucket_exists $org $bucket_name &&
+    for bucket_name in $(get_acl "$cnf" "$name" "read"); do
+        bucket_exists "$org" "$bucket_name" &&
             read_buckets="$read_buckets --read-bucket $(bucket_id_by_name $org $bucket_name)"
     done
 
     write_buckets=""
-    for bucket_name in $(get_acl $cnf $name "write"); do
-        bucket_exists $org $bucket_name &&
+    for bucket_name in $(get_acl "$cnf" "$name" "write"); do
+        bucket_exists "$org" "$bucket_name" &&
             write_buckets="$write_buckets --write-bucket $(bucket_id_by_name $org $bucket_name)"
     done
 
@@ -101,5 +101,6 @@ yq -j e .users "$CONFIG" | jq -r '.[] | [.name, .password] | @tsv' |
 while IFS=$'\t' read -r name password; do
     [ -n "$name" ] || warning "A user does not have a name" &&
         [ -n "$password" ] || warning "User $name does not have a password" &&
-        add_v1_user $CONFIG $name $password $ORG
+        add_v1_user "$CONFIG" "$name" "$password" "$ORG"
 done
+exit 0
