@@ -7,6 +7,8 @@ name: CI
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - 
         name: Verify commit signatures
@@ -42,3 +44,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      -
+        name: Slack notification
+        uses: act10ns/slack@v1
+        with: 
+          status: ${{ job.status }}
+        if: always() 
