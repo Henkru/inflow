@@ -51,7 +51,7 @@ function get_acl {
 }
 
 function user_exists {
-    influx v1 auth list --json | jq -e ".[] |select(.token==\"$1\")" 1> /dev/null
+    influx v1 auth list --json | jq -e ".[] |select(.token==\"$1\")" 1> /dev/null 2> /dev/null
 }
 
 function add_v1_user() {
