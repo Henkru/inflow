@@ -81,6 +81,9 @@ services:
     secrets:
       - user-1
       - user-2
+    deploy:
+      restart_policy:
+        condition: on-failure
 
 configs:
   inflow.config:
