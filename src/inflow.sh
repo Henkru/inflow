@@ -93,7 +93,8 @@ while IFS=$'\t' read -r name retention description; do
         info "Bukcet $name already exists, try to update it" &&
         influx bucket update --id "$(bucket_id_by_name $ORG $name)" --name "$name" --retention "${retention:-0}" --description "${description:-''}" ||
         (info "Creating bucket with name $name" &&
-        influx bucket create --org "$ORG" --name "$name" --retention "${retention:-0}" --description "${description:-''}")
+        influx bucket create --org "$ORG" --name "$name" --retention "${retention:-0}" --description "${description:-''}" &&
+        influx v1 dbrp create --org "$ORG" --db "$name" --rp "$name" --bucket-id $(bucket_id_by_name "$ORG" "$name") --default)
 done
 
 info "Creating users"
