@@ -1,0 +1,18 @@
+org: my-org
+buckets:
+  - name: bucket-1
+  - name: bucket-2
+    retention: 1h
+    description: "lorem ipsum"
+users:
+  - name: user1
+    password: "{{ secret `user-1` }}"
+    write:
+      - bucket-1
+  - name: user2
+    password: "{{ secret `user-2` }}"
+    write:
+      - bucket-1
+    read:
+      - bucket-1
+      - bucket-2

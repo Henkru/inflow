@@ -1,0 +1,2 @@
+export INFLUX_HOST=http://localhost:8086
+export INFLUX_TOKEN=my-token
