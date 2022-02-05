@@ -47,7 +47,7 @@ function bucket_id_by_name {
 }
 
 function get_acl {
-    echo $(yq -j e .users "$1" | jq -r ".[] | select(.name == \"$2\") | .$3 | @tsv" 2> /dev/null)
+    echo $(yq -o=json e .users "$1" | jq -r ".[] | select(.name == \"$2\") | .$3 | @tsv" 2> /dev/null)
 }
 
 function user_exists {
@@ -87,7 +87,7 @@ ORG=`yq -e e '.org' $CONFIG` || error "The $CONFIG file does not set the organiz
 info "Organization: $ORG"
 
 info "Creating buckets"
-yq -j e .buckets "$CONFIG" | jq -r '.[] | [.name, .retention, .description] | @tsv' |
+yq -o=json e .buckets "$CONFIG" | jq -r '.[] | [.name, .retention, .description] | @tsv' |
 while IFS=$'\t' read -r name retention description; do
     [ -n "$name" ] || warning "The bucket does not have a name" && bucket_exists $ORG $name &&
         info "Bukcet $name already exists, try to update it" &&
@@ -98,7 +98,7 @@ while IFS=$'\t' read -r name retention description; do
 done
 
 info "Creating users"
-yq -j e .users "$CONFIG" | jq -r '.[] | [.name, .password] | @tsv' |
+yq -o=json e .users "$CONFIG" | jq -r '.[] | [.name, .password] | @tsv' |
 while IFS=$'\t' read -r name password; do
     [ -n "$name" ] || warning "A user does not have a name" &&
         [ -n "$password" ] || warning "User $name does not have a password" &&

@@ -1,4 +1,4 @@
-FROM mikefarah/yq:4 AS yq
+FROM mikefarah/yq:4.18.1 AS yq
 FROM influxdb:2.0.4-alpine AS inflow
 
 COPY --from=yq /usr/bin/yq /usr/bin/
